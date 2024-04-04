@@ -1,0 +1,33 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.types import *
+
+schema = StructType([StructField("i_notification_id", IntegerType()), StructField("notification_name", StringType()), StructField("partition_0", StringType())])
+
+# Initialize a SparkSession
+spark = SparkSession.builder \
+    .appName("ReadDataFromFile") \
+    .enableHiveSupport() \
+    .config("hive.metastore.client.factory.class", "com.amazonaws.glue.catalog.metastore.AWSGlueDataCatalogHiveClientFactory") \
+    .enableHiveSupport() \
+    .getOrCreate() 
+     
+a = spark.sql("show databases")
+b = spark.sql("describe `emr-test-db`.input_test")
+c = spark.sql("select * from  `emr-test-db`.input_test")
+
+# Specify the path to the CSV file
+file_path = "s3://<s3-bucket-name>/"
+
+# Read data from the CSV file into a DataFrame
+df = spark.read \
+    .format("csv") \
+    .option("header", "true") \
+    .schema(schema) \
+    .load(file_path)
+
+a.show()
+b.show()
+c.show()
+
+# Stop the SparkSession
+spark.stop()
