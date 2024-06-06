@@ -7,7 +7,7 @@ spark = SparkSession.builder \
     .getOrCreate()
 
 # Specify the S3 file path
-s3_file_path = "s3://<s3-bucket"
+s3_file_path = "s3://<s3-bucket>"
 
 # Read the Parquet file into a DataFrame
 df = spark.read.parquet(s3_file_path)
