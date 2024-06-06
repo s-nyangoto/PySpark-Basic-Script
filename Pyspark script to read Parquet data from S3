@@ -1,0 +1,22 @@
+#Test scipt
+from pyspark.sql import SparkSession
+
+# Initialize a SparkSession
+spark = SparkSession.builder \
+    .appName("ReadParquetFromS3") \
+    .getOrCreate()
+
+# Specify the S3 file path
+s3_file_path = "s3://<s3-bucket"
+
+# Read the Parquet file into a DataFrame
+df = spark.read.parquet(s3_file_path)
+
+# Show the first few rows of the DataFrame
+df.show()
+
+# Print the schema of the DataFrame
+df.printSchema()
+
+# Stop the Spark session
+spark.stop()
